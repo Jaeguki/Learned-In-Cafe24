@@ -6,6 +6,7 @@ import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketException;
 public class TCPServer {
 	public static void main(String[] args) {
 		ServerSocket serverSocket = null;
@@ -23,6 +24,7 @@ public class TCPServer {
 
 			// 3. Accept
 			//  : Waiting for connecting by Client
+			//    Blocking Line...
 			Socket socket = serverSocket.accept();
 			
 			InetSocketAddress inetRemoteSocketAddress = (InetSocketAddress) socket.getRemoteSocketAddress();
@@ -33,37 +35,45 @@ public class TCPServer {
 			System.out.println("[server] connected by client [" + remoteHostAddress + ":" + remoteHostPort + "]");
 			System.out.println();
 			System.out.println();
-			// 4. Receive IOStream
-			InputStream is = socket.getInputStream();
-			OutputStream os = socket.getOutputStream();
+			
 			try {
-				while(true) {
-					
-					// 5. Read Data
-					// : Internet use byte data
-					byte[] buffer = new byte[256];
-					int readByteCount = is.read(buffer);
-					if(readByteCount == -1) {
-						// Correct End
-						//  : Call close() Method by Client
-						System.out.println("[server] closed by client ");
-						break;
+				// 4. Receive IOStream
+				InputStream is = socket.getInputStream();
+				OutputStream os = socket.getOutputStream();
+				try {
+					while(true) {
+						
+						// 5. Read Data
+						// : Internet use byte data
+						byte[] buffer = new byte[256];
+						int readByteCount = is.read(buffer);
+						if(readByteCount == -1) {
+							// Correct End
+							//  : Call close() Method by Client
+							System.out.println("[server] closed by client ");
+							break;
+						}
+						
+						String data = new String(buffer, 0, readByteCount, "utf-8");
+						System.out.println("[server] client says > " + data);
+						os.write(data.getBytes("utf-8"));
 					}
-					
-					String data = new String(buffer, 0, readByteCount, "utf-8");
-					System.out.println("[server] client says > " + data);
-					os.write(data.getBytes("utf-8"));
+				}catch(SocketException e) {
+					e.printStackTrace();
+					System.out.println(e + " [server] sudden close");
+				}catch(IOException e) {
+					e.printStackTrace();				
+				}finally {
+					try {
+						if(socket != null && !socket.isClosed()) {
+							socket.close();
+						}
+					}catch(IOException e) {
+						e.printStackTrace();
+					}
 				}
 			}catch(IOException e) {
-				e.printStackTrace();				
-			}finally {
-				try {
-					if(socket != null && !socket.isClosed()) {
-						socket.close();
-					}
-				}catch(IOException e) {
-					e.printStackTrace();
-				}
+				e.printStackTrace();
 			}
 			
 		}catch(IOException e) {
