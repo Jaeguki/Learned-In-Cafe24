@@ -15,6 +15,10 @@ public class TCPServer {
 			// 1. ServerSocket Make
 			serverSocket = new ServerSocket();
 			
+			// 1-1. Assign Port Time-wait
+			serverSocket.setReuseAddress(true);
+			
+			
 			// 2. Binding
 			//  : Socket -> SocketAddress(IPAddress + Port)
 			InetAddress inetAddress = InetAddress.getLocalHost();
@@ -56,6 +60,12 @@ public class TCPServer {
 						
 						String data = new String(buffer, 0, readByteCount, "utf-8");
 						System.out.println("[server] client says > " + data);
+						try {
+							Thread.sleep(3000);
+						} catch (InterruptedException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
 						os.write(data.getBytes("utf-8"));
 					}
 				}catch(SocketException e) {

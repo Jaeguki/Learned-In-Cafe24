@@ -24,6 +24,7 @@ public class EchoClient {
 			
 			// 2. Create Socket
 			socket = new Socket();
+
 			
 			// 3. Server Connection
 			socket.connect(new InetSocketAddress(SERVER_IP, SERVER_PORT));
@@ -31,7 +32,7 @@ public class EchoClient {
 
 			InputStream is = socket.getInputStream();
 			OutputStream os = socket.getOutputStream();
-			
+
 			BufferedReader br = new BufferedReader(new InputStreamReader(socket.getInputStream(), "utf-8"));
 			PrintWriter pw = new PrintWriter(new OutputStreamWriter(socket.getOutputStream(), "utf-8"), true);
 
@@ -41,6 +42,7 @@ public class EchoClient {
 				String line = scanner.nextLine();
 				if("quit".equals(line)) {
 					break;
+
 				}
 				
 				// 6. Write Data
