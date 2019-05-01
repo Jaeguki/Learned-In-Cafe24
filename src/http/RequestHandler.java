@@ -11,12 +11,9 @@ import java.net.URISyntaxException;
 import java.nio.file.Files;
 
 public class RequestHandler extends Thread {
-	
 	private static String documentRoot = "";
-	
 	static {
 		documentRoot = RequestHandler.class.getClass().getResource("/webapp").getPath();
-		System.out.println("--->" + documentRoot);
 	}
 	
 	private Socket socket;
@@ -28,58 +25,53 @@ public class RequestHandler extends Thread {
 	@Override
 	public void run() {
 		try {
-
 			// logging Remote Host IP Address & Port
 			InetSocketAddress inetSocketAddress = ( InetSocketAddress )socket.getRemoteSocketAddress();
 			consoleLog( "connected from " + inetSocketAddress.getAddress().getHostAddress() + ":" + inetSocketAddress.getPort() );
-
+			
 			// get IOStream
 			OutputStream os = socket.getOutputStream();
-			BufferedReader br = new BufferedReader(new InputStreamReader(socket.getInputStream(), "utf-8"));
+			BufferedReader br = new BufferedReader(new InputStreamReader(socket.getInputStream(),"utf-8"));
 			
 			String request = null;
 			
 			while(true) {
 				String line = br.readLine();
 				
-				// if browser disconnect
+				//브라우저가 연결을 끊으면...
 				if(line == null) {
 					break;
 				}
 				
-				// Readonly Request Header
+				// Request Header만 읽음
 				if("".equals(line)) {
 					break;
 				}
 				
-				// Readonly First Line
+				// Header의 첫번째 라인만 처리
 				if(request == null) {
 					request = line;
 				}
-				
-				// consoleLog("Received:" + line);
 			}
-			
-			consoleLog("Received:" + request);
+
 			String[] tokens = request.split(" ");
 			if("GET".contentEquals(tokens[0])) {
-				consoleLog("request:" + tokens[0]);
+				consoleLog("request:" + tokens[1]);
 				responseStaticResource(os, tokens[1], tokens[2]);
-			}
-			// Ignore Method(Like Post, Put, Delete, Head, Connect...)
-			else {
-				response400Error(os, tokens[2]);
-				consoleLog("Bad Request:" + tokens[1]);
+			} else { // POST, PUT, DELETE, HEAD, CONNECT
+				     // 와 같은 Method는 무시 
+				
+				//응답 예시
+				// HTTP/1.1 400 Bad Request\r\n
+				// Content-Type:text/html; charset=utf-8\r\n
+				// \r\n
+				// HTML 에러 문서 (./webapp/error/400.html)
+				
+				response400Error(os, tokens[1], tokens[2]);				
+				consoleLog("Bad Request:" + request);
+				
 			}
 			
-			// 예제 응답입니다.
-			// 서버 시작과 테스트를 마친 후, 주석 처리 합니다.
-			// os.write( "HTTP/1.1 200 OK\r\n".getBytes( "UTF-8" ) );
-			//os.write( "Content-Type:text/html; charset=utf-8\r\n".getBytes( "UTF-8" ) );
-			// os.write( "\r\n".getBytes() );
-			// 개행문자를 통한 헤더 분석
-			// os.write( "<h1>이 페이지가 잘 보이면 실습과제 SimpleHttpServer를 시작할 준비가 된 것입니다.</h1>".getBytes( "UTF-8" ) );
-
 		} catch( Exception ex ) {
 			consoleLog( "error:" + ex );
 		} finally {
@@ -95,59 +87,86 @@ public class RequestHandler extends Thread {
 		}			
 	}
 
-	private void responseStaticResource(OutputStream os, String url, String protocol) throws IOException{
+	public void responseStaticResource (
+		OutputStream os, 
+		String url,
+		String protocol) throws IOException {
 		
 		if("/".equals(url)) {
 			url = "/index.html";
 		}
+		
 		File file = new File(documentRoot + url);
 		if(file.exists() == false) {
-			/*
-			 * HTTP/1.1 404 File Not Found \r\n
-			 * Content-Type:text/html; charset=utf=8\r\n
-			 * 	\r\n
-			 * error HTML DOC
-			 */
-			response404Error(os, protocol);
+			//응답 예시
+			// HTTP/1.1 404 File Not Found\r\n
+			// Content-Type:text/html; charset=utf-8\r\n
+			// \r\n
+			// HTML 에러 문서 (./webapp/error/404.html)
+			
+			response404Error(os, url, protocol);
 			return;
 		}
-
-		// nio
+		
+		//nio
 		byte[] body = Files.readAllBytes(file.toPath());
-		String contentType = Files.probeContentType(file.toPath());
-		// response
-		os.write( (protocol +" 200 OK\r\n").getBytes( "UTF-8" ) );
-		os.write( (contentType  + "; charset=utf-8\r\n").getBytes( "UTF-8" ) );
+		String contentType = Files.probeContentType( file.toPath() );
+		
+		//응답
+		os.write( (protocol + " 200 OK\r\n").getBytes( "UTF-8" ) );
+		os.write( ("Content-Type:" + contentType + "; charset=utf-8\r\n").getBytes( "UTF-8" ) );
 		os.write( "\r\n".getBytes() );
 		os.write( body );
+	}
 
+	private void response404Error(OutputStream os, String url, String protocol) throws IOException {
+		consoleLog( url + " 404 File Not Found" );
+
+		File file = new File( documentRoot + "/error/404.html" );
+
+		byte[] body = null;
+		if (file.exists()) {
+			body = Files.readAllBytes(file.toPath());
+		}
+
+		// header 전송
+		os.write((protocol + " 404 File Not Found\r\n").getBytes("UTF-8"));
+
+		if (body != null) {
+
+			String mimeType = Files.probeContentType(file.toPath());
+			os.write(("Content-Type:" + mimeType + "; charset=utf-8\r\n").getBytes("UTF-8"));
+			os.write("\r\n".getBytes());
+
+			// body 전송
+			os.write( body );
+		}
+	}
+
+	private void response400Error(OutputStream os, String url, String protocol) throws IOException {
+		consoleLog( url + " 400 Bad Request" );
+
+		File file = new File( documentRoot + "/error/400.html" );
+
+		byte[] body = null;
+		if ( file.exists() ) {
+			body = Files.readAllBytes(file.toPath());
+		}
+
+		// header 전송
+		os.write((protocol + " 400 Bad Request\r\n").getBytes("UTF-8"));
+
+		if (body != null) {
+
+			String mimeType = Files.probeContentType(file.toPath());
+			os.write(("Content-Type:" + mimeType + "; charset=utf-8\r\n").getBytes("UTF-8"));
+			os.write("\r\n".getBytes());
+
+			// body 전송
+			os.write(body);
+		}
+	}
 	
-	}
-
-	private void response404Error(OutputStream os, String protocol) throws IOException{
-		File file = new File(documentRoot + "/error/404.html"); 
-		byte[] body = Files.readAllBytes(file.toPath());
-		String contentType = Files.probeContentType(file.toPath());
-		// response
-		os.write( (protocol +" 404 Not Found\r\n").getBytes( "UTF-8" ) );
-		os.write( (contentType  + "; charset=utf-8\r\n").getBytes( "UTF-8" ) );
-		os.write( "\r\n".getBytes() );
-		os.write( body );
-		consoleLog("404 Not Found");
-	}
-	
-	private void response400Error(OutputStream os, String protocol) throws IOException{
-		File file = new File(documentRoot + "/error/400.html"); 
-		byte[] body = Files.readAllBytes(file.toPath());
-		String contentType = Files.probeContentType(file.toPath());
-		// response
-		os.write( (protocol +" 400 Bad Request\r\n").getBytes( "UTF-8" ) );
-		os.write( (contentType  + "; charset=utf-8\r\n").getBytes( "UTF-8" ) );
-		os.write( "\r\n".getBytes() );
-		os.write( body );
-		consoleLog("400 Bad Request");
-	}
-
 	public void consoleLog( String message ) {
 		System.out.println( "[RequestHandler#" + getId() + "] " + message );
 	}

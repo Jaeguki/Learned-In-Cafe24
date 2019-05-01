@@ -7,7 +7,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 public class SimpleHttpServer {
-	private static final int SERVER_PORT = 5002;
+	private static final int PORT = 8888;
 
 	public static void main(String[] args) {
 
@@ -18,11 +18,10 @@ public class SimpleHttpServer {
 			serverSocket = new ServerSocket();
 			   
 			// 2. Bind
-			String localhost = InetAddress.getLocalHost().getHostAddress();
-			serverSocket.bind( new InetSocketAddress( "0.0.0.0", SERVER_PORT ) );
-			consoleLog("httpd starts at " + SERVER_PORT);
+			serverSocket.bind( new InetSocketAddress( "0.0.0.0", PORT ) );
+			consoleLog("httpd starts at " + PORT);
 
-			while (true) {
+			while(true) {
 				// 3. Wait for connecting ( accept )
 				Socket socket = serverSocket.accept();
 
