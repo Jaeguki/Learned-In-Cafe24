@@ -24,7 +24,7 @@ public class TCPServer {
 			InetAddress inetAddress = InetAddress.getLocalHost();
 			// String localhost = inetAddress.getHostAddress();
 			// serverSocket.bind( new InetSocketAddress(localhost, 5000));
-			serverSocket.bind( new InetSocketAddress("0.0.0.0", 5001));
+			serverSocket.bind( new InetSocketAddress("0.0.0.0", 5000));
 
 			// 3. Accept
 			//  : Waiting for connecting by Client
