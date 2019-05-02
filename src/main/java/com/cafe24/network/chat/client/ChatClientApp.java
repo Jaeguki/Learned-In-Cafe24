@@ -7,10 +7,11 @@ import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
 import java.util.Scanner;
+import java.util.Base64;
 
 public class ChatClientApp {
-	private static final String SERVER_IP = "222.106.22.93";
-	private static final int SERVER_PORT = 80;
+	private static final String SERVER_IP = "0.0.0.0";
+	private static final int SERVER_PORT = 5000;
 
 	public static void main(String[] args) {
 		String name = null;
@@ -21,11 +22,9 @@ public class ChatClientApp {
 			System.out.println("대화명을 입력하세요.");
 			System.out.print(">>> ");
 			name = scanner.nextLine();
-			
 			if (name.isEmpty() == false ) {
 				break;
 			}
-			
 			System.out.println("대화명은 한글자 이상 입력해야 합니다.\n");
 		}
 		
@@ -34,11 +33,10 @@ public class ChatClientApp {
 		Socket socket = new Socket();
 		try {
 			socket.connect( new InetSocketAddress(SERVER_IP, SERVER_PORT) );
-			consoleLog("채팅방에 입장하였습니다.");
 			new ChatWindow(name, socket).show();
 			
 			PrintWriter pw = new PrintWriter(new OutputStreamWriter(socket.getOutputStream(), StandardCharsets.UTF_8), true);
-			String request = "join:" + name + "\r\n";
+			String request = "join:"+ name +"\r\n";
 			pw.println(request);
 		}
 		catch (IOException e) {

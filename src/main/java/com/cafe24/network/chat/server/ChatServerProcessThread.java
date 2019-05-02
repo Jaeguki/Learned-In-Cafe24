@@ -1,5 +1,6 @@
 package com.cafe24.network.chat.server;
 
+import java.beans.Encoder;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -8,6 +9,7 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
+import java.util.Base64;
 
 public class ChatServerProcessThread extends Thread{
 	private String nickname = null;
@@ -40,7 +42,14 @@ public class ChatServerProcessThread extends Thread{
 					doJoin(tokens[1], printWriter);
 				}
 				else if("message".equals(tokens[0])) {
-					doMessage(tokens[1]);
+					if(tokens.length == 1) {}
+					else {
+						
+						// 사용자 입력에서 프로토콜 구분자 사용을 막기위한 Base64 Encoding을
+						// Decoding 해주는 작업
+						String message =new String(Base64.getDecoder().decode(tokens[1]));
+						doMessage(message);
+					}
 				}
 				else if("quit".equals(tokens[0])) {
 					doQuit(printWriter);
@@ -54,7 +63,6 @@ public class ChatServerProcessThread extends Thread{
 	
 	private void doQuit(PrintWriter writer) {
 		removeWriter(writer);
-		consoleLog(this.nickname + "로 부터 연결이 끊겼습니다.");
 		String data = this.nickname + "님이 퇴장했습니다.";
 		broadcast(data);
 	}
@@ -71,8 +79,8 @@ public class ChatServerProcessThread extends Thread{
 
 	private void doJoin(String nickname, PrintWriter writer) {
 		this.nickname = nickname;
-		consoleLog(this.nickname + "과 연결되었습니다.");
 		String data = nickname + "님이 입장하였습니다.";
+		System.out.println(data);
 		broadcast(data);
 		
 		// writer pool에 저장

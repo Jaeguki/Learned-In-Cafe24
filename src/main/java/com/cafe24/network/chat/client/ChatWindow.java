@@ -21,6 +21,7 @@ import java.io.PrintWriter;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
+import java.util.Base64;
 
 public class ChatWindow {
 	private String name;
@@ -84,7 +85,7 @@ public class ChatWindow {
 				PrintWriter pw;
 				try {
 					pw = new PrintWriter(new OutputStreamWriter(socket.getOutputStream(), StandardCharsets.UTF_8), true);
-					String request = "quit\r\n";
+					String request = name + " has left the room\r\n";
 					pw.println(request);
 					finish();
 				}
@@ -102,8 +103,8 @@ public class ChatWindow {
 	}
 	
 	private void updateTextArea(String message) {
-		textArea.append(message);
-		textArea.append("\n");
+		// textArea.append(message);
+		// textArea.append("\n");
 	}
 	
 	private void sendMessage() {
@@ -111,7 +112,9 @@ public class ChatWindow {
 		try {
 			pw = new PrintWriter(new OutputStreamWriter(socket.getOutputStream(), StandardCharsets.UTF_8), true);
 			String message = textField.getText();
-			String request = "message:" + message + "\r\n";
+			// 사용자 입력에서 프로토콜 구분자 사용을 막기위한 Base64 Encoding
+			String encoded = Base64.getEncoder().encodeToString(message.getBytes());
+			String request = "message:" + encoded + "\r\n";
 			pw.println(request);
 
 			textField.setText("");
@@ -138,6 +141,7 @@ public class ChatWindow {
 					String msg = br.readLine();
 					textArea.append(msg);
 					textArea.append("\n");
+					System.out.println(msg);
 				}
 			}
 			catch (IOException e) {
