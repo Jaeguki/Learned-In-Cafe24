@@ -85,7 +85,7 @@ public class ChatWindow {
 				PrintWriter pw;
 				try {
 					pw = new PrintWriter(new OutputStreamWriter(socket.getOutputStream(), StandardCharsets.UTF_8), true);
-					String request = name + " has left the room\r\n";
+					String request = "quit:" + name + " has left the room\r\n";
 					pw.println(request);
 					finish();
 				}
@@ -99,6 +99,7 @@ public class ChatWindow {
 	}
 	
 	private void finish() {
+		
 		System.exit(0);
 	}
 	

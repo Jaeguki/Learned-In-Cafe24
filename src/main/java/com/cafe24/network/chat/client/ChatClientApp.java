@@ -10,8 +10,8 @@ import java.util.Scanner;
 import java.util.Base64;
 
 public class ChatClientApp {
-	private static final String SERVER_IP = "127.0.0.1";
-	private static final int SERVER_PORT = 80;
+	private static final String SERVER_IP = "0.0.0.0";
+	private static final int SERVER_PORT = 5000;
 
 	public static void main(String[] args) {
 		String name = null;
