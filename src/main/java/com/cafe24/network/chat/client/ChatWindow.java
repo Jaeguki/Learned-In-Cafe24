@@ -30,7 +30,6 @@ public class ChatWindow {
 	private Button buttonSend;
 	private TextField textField;
 	private TextArea textArea;
-	
 	private Socket socket;
 
 	public ChatWindow(String name, Socket socket) {

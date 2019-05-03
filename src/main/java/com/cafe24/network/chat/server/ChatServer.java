@@ -59,7 +59,6 @@ public class ChatServer {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-
 		}
 		
 		try {

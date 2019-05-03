@@ -14,7 +14,7 @@ public class ChatServerProcessThread extends Thread{
 	private String nickname = null;
 	private Socket socket = null;
 	List<PrintWriter> listWriters = null;
-
+	
 	public ChatServerProcessThread(Socket socket, List<PrintWriter> listWriters) {
 		this.socket = socket;
 		this.listWriters = listWriters;
@@ -52,6 +52,7 @@ public class ChatServerProcessThread extends Thread{
 				}
 				else if("quit".equals(tokens[0])) {
 					doQuit(printWriter);
+					break;
 				}
 			}
 		}
