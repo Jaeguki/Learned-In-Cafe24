@@ -106,7 +106,7 @@ public class OrdersBookDao {
 		try {
 			Class.forName("org.mariadb.jdbc.Driver");
 			// 2. Connect
-			String url = "jdbc:mariadb://192.168.1.176:3307/bookmall";
+			String url = "jdbc:mariadb://localhost:3307/bookmall";
 			conn = DriverManager.getConnection(url, "bookmall", "bookmall");
 		}catch (ClassNotFoundException e) {
 			e.printStackTrace();
