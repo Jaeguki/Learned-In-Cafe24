@@ -9,6 +9,8 @@ public class UserActionFactory extends ActionFactory {
 	@Override
 	public Action getAction(String actionName) {
 		Action action = null;
+		System.out.println(actionName);
+		System.out.println();
 		if("joinform".equals(actionName)) {
 			action = new JoinFormAction();
 		} else if("join".equals(actionName)) {
@@ -23,6 +25,8 @@ public class UserActionFactory extends ActionFactory {
 			action = new LogoutAction();
 		} else if("updateform".equals(actionName)) {
 			action = new UpdateFormAction();
+		} else if("update".equals(actionName)) {
+			action = new UpdateAction();
 		} else {
 			action = new MainAction();
 		}

@@ -22,6 +22,7 @@ public class LoginAction implements Action {
 		UserVo authUser = new UserDao().get(email, password);
 		if(authUser == null) {
 			request.setAttribute("result", "fail");
+			System.out.println("fail");
 			WebUtil.forward(request, response, "/WEB-INF/views/user/loginform.jsp");
 			return;
 		}

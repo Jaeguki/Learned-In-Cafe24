@@ -95,7 +95,7 @@ public class GuestbookDao {
 		try {
 			conn = getConnection();
 			
-			String sql = "select no, name, conetnts, date_format(reg_date, '%Y-%m-%d %h:%i:%s') from guestbook order by reg_date desc";
+			String sql = "select no, name, contents, date_format(reg_date, '%Y-%m-%d %h:%i:%s') from guestbook order by reg_date desc";
 			pstmt = conn.prepareStatement(sql);
 			
 			rs = pstmt.executeQuery();
@@ -138,8 +138,8 @@ public class GuestbookDao {
 		Connection conn = null;
 		try {
 			Class.forName("org.mariadb.jdbc.Driver");
-			String url = "jdbc:mariadb://192.168.1.250:3307/webdb?characterEncoding=utf8";
-			conn = DriverManager.getConnection(url, "webdb", "webdb");
+			String url = "jdbc:mariadb://192.168.1.18:3307/webdb?characterEncoding=utf8";
+			conn = DriverManager.getConnection(url, "jaeguki", "wornr12#");
 
 		} catch (ClassNotFoundException e) {
 			System.out.println("드라이버 로딩 실패:" + e);
