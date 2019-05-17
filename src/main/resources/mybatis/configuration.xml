@@ -3,7 +3,7 @@
 <configuration>
 	<typeAliases>
 		<typeAlias alias="uservo" type="com.cafe24.mysite.vo.UserVo" />
-		<typeAlias alias="guestvookvo" type="com.cafe24.mysite.vo.GuestbookVo" />
+		<typeAlias alias="guestbookvo" type="com.cafe24.mysite.vo.GuestbookVo" />
     </typeAliases>	
 	<mappers>
 		<mapper resource="mybatis/mapper/user.xml" />

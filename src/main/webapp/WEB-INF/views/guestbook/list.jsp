@@ -1,9 +1,9 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>  
-<%@page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-<%pageContext.setAttribute("newline", "\n");%>
-<!DOCTYPE html>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
+<%@ page contentType="text/html;charset=UTF-8" %>
+<% pageContext.setAttribute( "newLine", "\n" ); %>
+<!doctype html>
 <html>
 <head>
 <title>mysite</title>
@@ -12,7 +12,7 @@
 </head>
 <body>
 	<div id="container">
-		<c:import url='/WEB-INF/views/includes/header.jsp' />
+		<c:import url="/WEB-INF/views/includes/header.jsp" />
 		<div id="content">
 			<div id="guestbook">
 				<form action="${pageContext.servletContext.contextPath }/guestbook/add" method="post">
@@ -25,37 +25,35 @@
 							<td colspan=4><textarea name="contents" id="content"></textarea></td>
 						</tr>
 						<tr>
-							<td colspan=4 align=right><input type="submit" value=" 확인 "></td>
+							<td colspan=4 align=right><input type="submit" VALUE=" 확인 "></td>
 						</tr>
 					</table>
 				</form>
 				<ul>
-					<c:set var='count' value='${fn:length(list) }'/>
-					<c:forEach items='${list }' var='vo' varStatus='status'>
+					<c:set var="count" value="${fn:length(list) }"/>
+					<c:forEach items="${list }" var="vo" varStatus="status">
 						<li>
 							<table>
 								<tr>
-									<td>[${count-status.index }]</td>
+									<td>[${count - status.index }]</td>
 									<td>${vo.name }</td>
-									<td>${vo.regDate }/td>
+									<td>${vo.regDate }</td>
 									<td><a href="${pageContext.servletContext.contextPath }/guestbook/delete/${vo.no }">삭제</a></td>
 								</tr>
 								<tr>
-									<td colspan=4>
-										${fn:replace(vo.contents, newline, "<br>") }	
-									</td>
+									<td colspan="4">${fn:replace(vo.contents, newLine, "<br>") }</td>
 								</tr>
 							</table>
 							<br>
-						</li>
+						</li>						
 					</c:forEach>
 				</ul>
 			</div>
 		</div>
-		<c:import url='/WEB-INF/views/includes/navigation.jsp'>
-			<c:param name="menu" value="guestbook" />
+		<c:import url="/WEB-INF/views/includes/navigation.jsp">
+			<c:param name="menu" value="guestbook"/>
 		</c:import>
-		<c:import url='/WEB-INF/views/includes/footer.jsp' />
+		<c:import url="/WEB-INF/views/includes/footer.jsp" />
 	</div>
 </body>
 </html>

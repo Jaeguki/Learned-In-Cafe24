@@ -17,7 +17,7 @@
 
 	<select id="getByNo" resultType="uservo" parameterType='long'>
 		<![CDATA[	 
-		select no, name
+		select no, name, email, gender
 		  from user 
 		 where no = #{value }
 		]]>
@@ -39,7 +39,7 @@
 		]]>
 		<if test="password != ''">
 			<![CDATA[
-			password=#{password }
+			password=#{password },
 			]]>
 		</if>		   
 		<![CDATA[

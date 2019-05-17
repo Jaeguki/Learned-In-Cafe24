@@ -32,5 +32,9 @@ public class UserDao {
 		int count = sqlSession.insert("user.insert", vo);
 		System.out.println(vo);
 		return 1 == count;
+	}
+	
+	public int update( UserVo userVo ) {
+		return sqlSession.update( "user.update", userVo );
 	}	
 }
