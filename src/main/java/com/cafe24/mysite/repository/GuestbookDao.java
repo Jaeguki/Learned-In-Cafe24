@@ -1,26 +1,31 @@
 package com.cafe24.mysite.repository;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.sql.DataSource;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.cafe24.mysite.vo.GuestbookVo;
 
 @Repository
 public class GuestbookDao {
-	public Boolean delete(GuestbookVo vo) {
-		Boolean result = false;
-		
+	
+	@Autowired
+	private DataSource dataSource;
+	
+	public int delete(GuestbookVo vo) {
+		int count = 0;
 		Connection conn = null;
 		PreparedStatement pstmt = null;
 		try {
-			conn = getConnection();
+			conn = dataSource.getConnection();
 			
 			String sql =
 				"delete from guestbook where no=? and password=?";
@@ -29,9 +34,7 @@ public class GuestbookDao {
 			pstmt.setLong(1, vo.getNo());
 			pstmt.setString(2, vo.getPassword());
 			
-			int count = pstmt.executeUpdate();
-			result = (count == 1);
-			
+			count = pstmt.executeUpdate();
 		} catch (SQLException e) {
 			System.out.println("error" + e);
 		} finally {
@@ -47,16 +50,16 @@ public class GuestbookDao {
 			}
 		}		
 		
-		return result;
+		return count;
 	}
 	
-	public Boolean insert(GuestbookVo vo) {
-		Boolean result = false;
+	public int insert(GuestbookVo vo) {
+		int count = 0;
 		
 		Connection conn = null;
 		PreparedStatement pstmt = null;
 		try {
-			conn = getConnection();
+			conn = dataSource.getConnection();
 			
 			String sql =
 				" insert" + 
@@ -68,8 +71,7 @@ public class GuestbookDao {
 			pstmt.setString(2, vo.getPassword());
 			pstmt.setString(3, vo.getContents());
 			
-			int count = pstmt.executeUpdate();
-			result = (count == 1);
+			count = pstmt.executeUpdate();
 			
 		} catch (SQLException e) {
 			System.out.println("error" + e);
@@ -86,7 +88,7 @@ public class GuestbookDao {
 			}
 		}		
 		
-		return result;
+		return count;
 	}	
 	
 	public List<GuestbookVo> getList(){
@@ -96,7 +98,7 @@ public class GuestbookDao {
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		try {
-			conn = getConnection();
+			conn = dataSource.getConnection();
 			
 			String sql = "select no, name, conetnts, date_format(reg_date, '%Y-%m-%d %h:%i:%s') from guestbook order by reg_date desc";
 			pstmt = conn.prepareStatement(sql);
@@ -136,17 +138,4 @@ public class GuestbookDao {
 		}		
 		return result;
 	}	
-	
-	private Connection getConnection() throws SQLException {
-		Connection conn = null;
-		try {
-			Class.forName("org.mariadb.jdbc.Driver");
-			String url = "jdbc:mariadb://192.168.1.250:3307/webdb?characterEncoding=utf8";
-			conn = DriverManager.getConnection(url, "webdb", "webdb");
-
-		} catch (ClassNotFoundException e) {
-			System.out.println("드라이버 로딩 실패:" + e);
-		}
-		return conn;
-	}
 }
