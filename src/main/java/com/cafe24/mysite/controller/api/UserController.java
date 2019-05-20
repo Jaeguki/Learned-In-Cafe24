@@ -19,16 +19,7 @@ public class UserController {
 	@ResponseBody
 	@RequestMapping("/checkemail")
 	public JSONResult checkEmail(@RequestParam(value="email", required=true, defaultValue="") String email) {
-		
 		Boolean exist = userService.existEmail(email);
-		
-		JSONResult result = new JSONResult();
-//		result.setResult("ok");
-//		Map<String, Object> map = new HashMap<String, Object>();
-//		map.put("result", "success");
-//		map.put("data", exist);
-		// map.put("message", ".....");
-		
-		return result;
+		return JSONResult.success(exist);
 	}
 }
