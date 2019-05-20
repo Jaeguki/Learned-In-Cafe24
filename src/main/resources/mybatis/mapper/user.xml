@@ -22,6 +22,14 @@
 		 where no = #{value }
 		]]>
 	</select>
+
+	<select id="getByEmail" resultType="uservo" parameterType='string'>
+		<![CDATA[	 
+		select no, name, email, gender
+		  from user 
+		 where email = #{value }
+		]]>
+	</select>
 	
 	<select id="getByEmailAndPassword" resultType="uservo" parameterType='map'>
 		<![CDATA[	 
