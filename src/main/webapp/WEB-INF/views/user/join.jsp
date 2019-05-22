@@ -10,10 +10,57 @@
 <title>mysite</title>
 <meta http-equiv="content-type" content="text/html; charset=utf-8">
 <link href="${pageContext.servletContext.contextPath }/assets/css/user.css" rel="stylesheet" type="text/css">
+<script src="${pageContext.servletContext.contextPath }/assets/js/jquery/jquery-1.9.0.js"></script>
+<script>
+$(function(){
+	$('#email').change(function(){
+		$('#check-button').show();
+		$('#check-image').hide();
+	});
+	
+	$('#check-button').click(function(){
+		var email = $('#email').val();
+		if(email == ''){
+			return;
+		}
+			
+		/* ajax 통신 */
+		$.ajax({
+			url: "${pageContext.servletContext.contextPath }/user/api/checkemail?email=" + email, 
+			type: "get", 
+			dataType: "json",
+			data: "",
+			success: function(response){
+				if(response.result != "success"){
+					console.log(response);
+					//console.error(response.message);
+					return;
+				}
+				
+				if(response.data == true){
+					alert('이미 존재하는 이메일입니다.\n다른 이메일을 사용해 주세요.');
+					$("#email").focus();
+					$("#email").val("");
+					return;
+				}
+
+				$('#check-button').hide();
+				$('#check-image').show();
+				
+			},
+			error: function(xhr, error){
+				console.error("error:" + error)
+			}
+		});
+		
+		console.log(email);
+	});	
+});
+</script>
 </head>
 <body>
 	<div id="container">
-		<jsp:include page="/WEB-INF/views/includes/header.jsp" />
+		<c:import url="/WEB-INF/views/includes/header.jsp" />
 		<div id="content">
 			<div id="user">
 				
@@ -66,8 +113,8 @@
 				</form:form>
 			</div>
 		</div>
-		<jsp:include page="/WEB-INF/views/includes/navigation.jsp" />
-		<jsp:include page="/WEB-INF/views/includes/footer.jsp" />
+		<c:import url="/WEB-INF/views/includes/navigation.jsp"/>
+		<c:import url="/WEB-INF/views/includes/footer.jsp" />
 	</div>
 </body>
 </html>
