@@ -3,7 +3,7 @@
 <mapper namespace="guestbook">
 	<select id="getList" resultType="guestbookvo">
 		<![CDATA[
-		elect no, name, contents, date_format(reg_date, '%Y-%m-%d %h:%i:%s')
+		select no, name, contents, date_format(reg_date, '%Y-%m-%d %h:%i:%s')
 		  from guestbook
 		order by reg_date desc
 	 	]]>	

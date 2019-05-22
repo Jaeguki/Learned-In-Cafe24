@@ -7,6 +7,7 @@ public class GuestbookVo {
 	private String contents;
 	private String regDate;
 	public Long getNo() {
+		
 		return no;
 	}
 	public void setNo(Long no) {
