@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.cafe24.mysite.service.UserService;
 import com.cafe24.mysite.vo.UserVo;
+import com.cafe24.security.Auth;
+import com.cafe24.security.AuthUser;
 
 @Controller
 @RequestMapping("/user")
@@ -58,13 +60,11 @@ public class UserController {
 		return "user/login";
 	}
 	
+	@Auth
 	@RequestMapping( value="/update", method=RequestMethod.GET )
-	public String update(HttpSession session, Model model ){
-		UserVo authUser = (UserVo)session.getAttribute("authUser");
-		if(authUser == null) {
-			return "redirect:/";
-		}
-		
+	public String update(
+		@AuthUser UserVo authUser,
+		Model model ){
 		UserVo userVo = userService.getUser( authUser.getNo() );
 		model.addAttribute( "userVo", userVo );
 		return "user/update";

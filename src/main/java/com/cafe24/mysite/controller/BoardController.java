@@ -9,13 +9,9 @@ import com.cafe24.security.Auth;
 @RequestMapping("/board")
 public class BoardController {
 
-	@Auth("USER")
+	@Auth
 	@RequestMapping("/write")
 	public String write() {
-//		if(session.getAttribute("authUser") == null) {
-//			return "redirect:/";	
-//		}
-		
 		return "board/write";
 	}
 }
