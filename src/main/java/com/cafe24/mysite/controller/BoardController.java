@@ -3,12 +3,19 @@ package com.cafe24.mysite.controller;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.cafe24.security.Auth;
+
 @Controller
 @RequestMapping("/board")
 public class BoardController {
 
-	@RequestMapping("/list")
-	public String list() {
-		return "board/list";
+	@Auth("USER")
+	@RequestMapping("/write")
+	public String write() {
+//		if(session.getAttribute("authUser") == null) {
+//			return "redirect:/";	
+//		}
+		
+		return "board/write";
 	}
 }
