@@ -155,10 +155,10 @@
 			<dependencies>
 				<!-- Servlet -->
 				<dependency>
-					<groupId>javax.servlet</groupId>
-					<artifactId>javax.servlet-api</artifactId>
-					<version>3.0.1</version>
-					<scope>provided</scope>
+				    <groupId>javax.servlet</groupId>
+				    <artifactId>javax.servlet-api</artifactId>
+				    <version>3.0.1</version>
+				    <scope>provided</scope>
 				</dependency>
 				<dependency>
 					<groupId>javax.servlet.jsp</groupId>
@@ -197,7 +197,7 @@
 				<artifactId>tomcat-maven-plugin</artifactId>
 				<configuration>
 					<url>http://127.0.0.1:8080/manager/text</url>
-					<path>/mysite2</path>
+					<path>/mysite10</path>
 					<username>admin</username>
 					<password>manager</password>
 				</configuration>
