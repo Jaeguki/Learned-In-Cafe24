@@ -32,13 +32,13 @@
 							<td>${map.totalCount - (map.currentPage - 1)*map.listSize - status.index }</td>
 							<c:choose>
 								<c:when test="${vo.depth > 0 }">
-									<td class="left" style="padding-left:${20*vo.depth }px">
+									<td class="left" style="text-align:left; padding-left:${20*vo.depth }px">
 										<img src="${pageContext.request.contextPath }/assets/images/reply.png">
 										<a href="${pageContext.request.contextPath }/board/view/${vo.no }?p=${map.currentPage }&kwd=${map.keyword }">${vo.title }</a>
 									</td>
 								</c:when>
 								<c:otherwise>
-									<td class="left">
+									<td class="left" style="text-align:left; padding-left:${20*vo.depth }px">
 										<a href="${pageContext.request.contextPath }/board/view/${vo.no }?p=${map.currentPage }&kwd=${map.keyword }">${vo.title }</a>
 									</td>
 								</c:otherwise>

@@ -10,7 +10,7 @@
 				  into board
 				values ( null,
 						 #{title },
-						 #{content },
+						 #{contents },
 						 0,
 						 now(),
 						 ( select ifnull( max( group_no ), 0 ) + 1
@@ -26,7 +26,7 @@
 				  into board
 				values ( null,
 						 #{title },
-						 #{content },
+						 #{contents },
 						 0,
 						 now(),
 						 #{groupNo },
@@ -42,7 +42,7 @@
 		<![CDATA[
 		update board 
 		   set title=#{title },
-		       content=#{content }
+		       contents=#{contents }
 		 where no=#{no }
 		   and user_no=#{userNo }		
 		]]>	
@@ -61,7 +61,7 @@
 		<![CDATA[
 		select	no,
 				title,
-				content,
+				contents,
 				group_no as groupNo,
 				order_no as orderNo,
 				depth,
@@ -75,7 +75,7 @@
 		<![CDATA[
 		select	no,
 				title,
-				content
+				contents
 		   from board
 		  where no = #{no }
 		    and user_no = #{userNo }		
@@ -110,7 +110,7 @@
 				  		 a.user_no as userNo
 				  	from board a, user b
 				   where a.user_no = b.no
-				     and (title like '%${keyword }%' or content like '%${keyword }%')
+				     and (title like '%${keyword }%' or contents like '%${keyword }%')
 				order by group_no desc, order_no asc
 				   limit #{startIndex }, #{size }				
 				]]>			
@@ -146,7 +146,7 @@
 				<![CDATA[
 				select count(*) 
 				  from board
-				 where (title like '%${_parameter }%' or content like '%${_parameter  }%') 
+				 where (title like '%${_parameter }%' or contents like '%${_parameter  }%') 
 				]]>				
 			</otherwise>
 		</choose>	
