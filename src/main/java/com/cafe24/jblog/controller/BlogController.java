@@ -63,7 +63,7 @@ public class BlogController {
 		model.addAttribute( "blogVO", blogVO );
 		model.addAttribute( "categoryVOList", categoryVOList );
 		model.addAttribute( "postVOList", postVOList );
-		//model.addAttribute( "postVO", postVO);
+		model.addAttribute( "postVO", postVO);
 		
 		System.out.println(blogVO);
 		System.out.println(categoryVOList);
