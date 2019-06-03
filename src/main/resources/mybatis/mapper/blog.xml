@@ -12,7 +12,7 @@
 	<update id="setBlogByVO" parameterType="blogvo">
 		<![CDATA[
 		update BLOG 
-		   set title=#{title }
+		   set title=#{title },
 		       logo=#{logo }
 		 where id=#{id }		
 		]]>	

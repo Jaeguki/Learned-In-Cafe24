@@ -15,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.cafe24.jblog.service.BlogService;
 import com.cafe24.jblog.service.CategoryService;
+import com.cafe24.jblog.service.FileUploadService;
 import com.cafe24.jblog.service.PostService;
 import com.cafe24.jblog.vo.BlogVO;
 import com.cafe24.jblog.vo.CategoryVO;
@@ -24,7 +25,7 @@ import com.cafe24.security.Auth;
 import com.cafe24.security.AuthUser;
 
 @Controller
-@RequestMapping("/{id:(?!assets).*}")
+@RequestMapping("/{id:(?!assets|images).*}")
 public class BlogController {
 	@Autowired
 	BlogService blogService;
@@ -34,6 +35,9 @@ public class BlogController {
 	
 	@Autowired
 	PostService postService;
+	
+	@Autowired
+	FileUploadService fileuploadService;
 	
 	@RequestMapping( {"", "/{pathNo1}", "/{pathNo1}/{pathNo2}" } )
 	public String index( @PathVariable String id, @PathVariable Optional<Long> pathNo1, @PathVariable Optional<Long> pathNo2, Model model) {
@@ -90,13 +94,15 @@ public class BlogController {
 	}
 
 	@RequestMapping(value="admin/basic", method=RequestMethod.POST)
-	public String basic(@PathVariable String id, Model model, @RequestParam(value="title", required=true, defaultValue="") String title, @RequestParam(value="logo-file") MultipartFile logoFile) {
+	public String basic(@PathVariable String id, Model model, @RequestParam(value="title", required=true, defaultValue="") String title, @RequestParam(value="logo-file") MultipartFile logoFile, @ModelAttribute BlogVO blogVO) {
 		System.out.println("admin basic post call");
 		System.out.println(title);
-		System.out.println(logoFile);
-		//blogService.setBlogInfo(blogVO);
-		//blogVO = blogService.getBlogInfo(id);
-		//model.addAttribute( "blogVO", blogVO );
+		System.out.println(fileuploadService.restore(logoFile));
+		blogVO.setLogo(fileuploadService.restore(logoFile));
+		blogService.setBlogInfo(blogVO);
+		blogVO = blogService.getBlogInfo(id);
+		System.out.println(blogVO);
+		model.addAttribute( "blogVO", blogVO );
 		return "blog/blog-admin-basic";
 	}
 	
