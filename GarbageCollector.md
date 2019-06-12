@@ -39,6 +39,7 @@ Native Method Stack, JNI(Java Native Interfate)를 통해 생성된 객체.
     Java가 아닌 다른 언어로 작성된 코드를 위한 공간으로, JNI를 통해 호출하는 C/C++등의 코드를 수행하기 위한 스택 공간입니다.
 ~~~
 
+## 참고 문헌
 
 피연산자스택 [https://stackoverflow.com/questions/24427056/what-is-an-operand-stack]
 
