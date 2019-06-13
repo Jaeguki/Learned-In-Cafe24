@@ -45,6 +45,8 @@ Native Method Stack, JNI(Java Native Interfate)를 통해 생성된 객체.
 
 intern 메소드에 대한 고찰 [https://blog.ggaman.com/918]
 
+콘스탄트풀에 대한 고찰 [https://bbchu.tistory.com/13]
+
 스트링풀에 대한 고찰 및 가비지 컬렉터 대상 [http://java-performance.info/string-intern-in-java-6-7-8/]
 
 JNI 예제 [https://mommoo.tistory.com/71]
