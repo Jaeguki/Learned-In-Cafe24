@@ -21,9 +21,7 @@ GC 메커니즘은 Week Generational Hypothesis로 두가지 가설을 중점으
 ~~~
 그렇기 때문에 객체 할당만을 위한 전용 공간인 Eden Area를 만들게 되었고, GC 당시 생존되어있는 객체들을 피신시키는 Survivor Area를 따로 구성한 것입니다.
 
-즉 Garbage가 될 확률이 적은 객체를 따로 관리한다는 것이 포인트입니다.
-
-...
+즉, Garbage가 될 확률이 적은 객체를 따로 관리한다는 것이 포인트입니다.
 
 Hotspot JVM에서 Garbage를 추적하는 부분은 Tracing 알고리즘을 사용합니다.
 
@@ -36,6 +34,8 @@ Root Set에서 참조 관계를 추적하고, 생존되어있는 객체는 마�
 그런데 만약 이런 상황에서 오래된 객체가 얼마 안 된 객체를 참조하는 상황이 있다고 가정하면, 존재 여부 확인을 위해 Old Generation을 모두 찾아 다니게 되고, 따라서 Suspend Time이 길어지게됩니다.
 
 그렇기 때문에 Hotspot JVM은 Card Table이란 장치를 마련했습니다.
+
+<br>
 
 ### Card Table
 
@@ -52,6 +52,8 @@ Card는 Old Area의 Memory 512bytes 당 1byte의 공간을 차지합니다.
 때문에 Hotspot JVM은 이러한 장치를 통해 Minor GC 수행 중에 Card Table의 Dirty Card만 검색하면 빠르게 참조 관계를 파악할 수 있습니다.
 
 그렇게하여 **오래된 객체는 만들어진지 얼마 안 된 객체를 참조할 일은 드물다.** 라는 두번째 가설을 보완했습니다.
+
+<br>
 
 ### TLAB(Theread-Local Allocation Buffers)
 
@@ -73,6 +75,8 @@ JVM은 기본적으로 Multi-Thread 환경이기 때문에 여러 Thread가 최�
  단, TLAB를 Thread에게 최초로 할당하거나 할당된 TLAB가 부족하여 새로이 할당을 받을때 는 동기화 이슈가 발생합니다.
  그러나 객체 할당 횟수에 비하면 동기화 이슈가 대폭 줄어들어 할당에 걸리는 시간은 상당히 줄어듭니다.
 ~~~
+
+<br>
 
 ## GC 대상 및 범위
 
@@ -109,5 +113,28 @@ Java 7 까지의 Perm영역에서는 다음과 같은 정보들이 저장되어 
 Java 8 버전의 Metaspace이 되며 Static Object 가 Heap 영역으로 이동하고, 상수회된 String Object도 Heap영으로 이동하였습니다.
 ~~~
 
+<br>
+
 ## GC 관련 옵션들
 
+기본적인 메모리 설정 방식
+
+JAVA_OPTS = "-DJava.awt.headless=true -Dfile.encoding=UTF-8 -server -Xms1024m -Xmx1024m -XX:NewSize=512m -XX:MaxNewSize=512m -XX:MetaspaceSize=512m -XX:MaxMetaspaceSize=512m -XX:+DisableExplicitGC"
+
+-Xms<Size> : Java Heap의 초기 크기를 Size 만큼 지정합니다.
+-Xmx<size> : Java Heap의 최대 크기를 Size 만큼 지정합니다.
+~~~
+Sun Hotspot JVM 계열에서는 최초 크기와 최대 크기를 동일하게 부여할 것을 권장합니다.
+왜냐하면 크기의 동적인 변경으로 인한 비용을 최소화 하기 위해서입니다.
+~~~
+ 
+-XX:NewSize=<Size> : Young Generation의 초기 크기를 Size 만큼 지정합니다.
+-XX:MaxNewSize=<Size> : Young Generation의 최대 크기를 Size 만큼 지정합니다.
+~~~
+객체가 생성되어 저장되는 초기공간의 Size로 Eden + Survivor 영역입니다.
+MaxNewSize는 1.4버전 이후 NewRatio에 따라 자동 계산됩니다.
+NewRatio의 기본 값은 2이며, 이는 Young Generation 과 Old Generation의 비율이 영향을 주며 1:2 가 됩니다.
+~~~
+ 
+-XX:MetaspaceSize=<Size> : Metaspace의 초기 크기를 Size 만큼 지정합니다.
+-XX:MaxMetaspaceSize=<Size> : Metaspace의 최대 크기를 Size 만큼 지정합니다.
