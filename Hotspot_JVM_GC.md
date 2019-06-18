@@ -121,23 +121,29 @@ Java 8 버전의 Metaspace이 되며 Static Object 가 Heap 영역으로 이동�
 
 JAVA_OPTS = "-DJava.awt.headless=true -Dfile.encoding=UTF-8 -server -Xms1024m -Xmx1024m -XX:NewSize=512m -XX:MaxNewSize=512m -XX:MetaspaceSize=512m -XX:MaxMetaspaceSize=512m -XX:+DisableExplicitGC"
 
--Xms value : Java Heap의 초기 크기를 value 만큼 지정합니다.
+- Xms value : Java Heap의 초기 크기를 value 만큼 지정합니다.
  
--Xmx value : Java Heap의 최대 크기를 value 만큼 지정합니다.
+- Xmx value : Java Heap의 최대 크기를 value 만큼 지정합니다.
 ~~~
 Sun Hotspot JVM 계열에서는 최초 크기와 최대 크기를 동일하게 부여할 것을 권장합니다.
 왜냐하면 크기의 동적인 변경으로 인한 비용을 최소화 하기 위해서입니다.
 ~~~
  
--XX:NewSize=value : Young Generation의 초기 크기를 value 만큼 지정합니다.
+- XX:NewSize=value : Young Generation의 초기 크기를 value 만큼 지정합니다.
  
--XX:MaxNewSize=value : Young Generation의 최대 크기를 value 만큼 지정합니다.
+- XX:MaxNewSize=value : Young Generation의 최대 크기를 value 만큼 지정합니다.
 ~~~
 객체가 생성되어 저장되는 초기공간의 value Eden + Survivor 영역입니다.
 MaxNewSize는 1.4버전 이후 NewRatio에 따라 자동 계산됩니다.
 NewRatio의 기본 값은 2이며, 이는 Young Generation 과 Old Generation의 비율이 영향을 주며 1:2 가 됩니다.
 ~~~
  
--XX:MetaspaceSize=value : Metaspace의 초기 크기를 value 만큼 지정합니다.
+- XX:MetaspaceSize=value : Metaspace의 초기 크기를 value 만큼 지정합니다.
  
--XX:MaxMetaspaceSize=value : Metaspace의 최대 크기를 value 만큼 지정합니다.
+- XX:MaxMetaspaceSize=value : Metaspace의 최대 크기를 value 만큼 지정합니다.
+~~~
+기존의 Perm 영역이 없어지고 Metaspace 영역이 생겼습니다.
+제한된 메모리 크기로 인해서 Perm영역은 제한된 메모리 크기로 인해서, 클래스 로더가 제대로 가비지 수집을 하지 못하여 결과적으로 메모리 누수를 발생시켰습니다.
+그러나 Metaspace 영역으로 대체 되면서 기본 메모리 영역이 다 찼을 시 기본적으로 자동으로 커지는 기능을 가지게 되었으며, 따라서 JVM은 메모리 누수가 발생할 가능성을 줄였습니다.
+~~~
+
