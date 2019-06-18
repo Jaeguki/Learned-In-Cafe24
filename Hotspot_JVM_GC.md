@@ -121,20 +121,23 @@ Java 8 버전의 Metaspace이 되며 Static Object 가 Heap 영역으로 이동�
 
 JAVA_OPTS = "-DJava.awt.headless=true -Dfile.encoding=UTF-8 -server -Xms1024m -Xmx1024m -XX:NewSize=512m -XX:MaxNewSize=512m -XX:MetaspaceSize=512m -XX:MaxMetaspaceSize=512m -XX:+DisableExplicitGC"
 
--Xms<Size> : Java Heap의 초기 크기를 Size 만큼 지정합니다.
--Xmx<size> : Java Heap의 최대 크기를 Size 만큼 지정합니다.
+-Xms value : Java Heap의 초기 크기를 value 만큼 지정합니다.
+ 
+-Xmx value : Java Heap의 최대 크기를 value 만큼 지정합니다.
 ~~~
 Sun Hotspot JVM 계열에서는 최초 크기와 최대 크기를 동일하게 부여할 것을 권장합니다.
 왜냐하면 크기의 동적인 변경으로 인한 비용을 최소화 하기 위해서입니다.
 ~~~
  
--XX:NewSize=<Size> : Young Generation의 초기 크기를 Size 만큼 지정합니다.
--XX:MaxNewSize=<Size> : Young Generation의 최대 크기를 Size 만큼 지정합니다.
+-XX:NewSize=value : Young Generation의 초기 크기를 value 만큼 지정합니다.
+ 
+-XX:MaxNewSize=value : Young Generation의 최대 크기를 value 만큼 지정합니다.
 ~~~
-객체가 생성되어 저장되는 초기공간의 Size로 Eden + Survivor 영역입니다.
+객체가 생성되어 저장되는 초기공간의 value Eden + Survivor 영역입니다.
 MaxNewSize는 1.4버전 이후 NewRatio에 따라 자동 계산됩니다.
 NewRatio의 기본 값은 2이며, 이는 Young Generation 과 Old Generation의 비율이 영향을 주며 1:2 가 됩니다.
 ~~~
  
--XX:MetaspaceSize=<Size> : Metaspace의 초기 크기를 Size 만큼 지정합니다.
--XX:MaxMetaspaceSize=<Size> : Metaspace의 최대 크기를 Size 만큼 지정합니다.
+-XX:MetaspaceSize=value : Metaspace의 초기 크기를 value 만큼 지정합니다.
+ 
+-XX:MaxMetaspaceSize=value : Metaspace의 최대 크기를 value 만큼 지정합니다.
