@@ -1,0 +1,18 @@
+{% extends '../base.html' %}
+{% load static %}
+
+{% block csslink %}
+<link href="{% static '/css/main.css' %}" rel="stylesheet" type="text/css">
+{% endblock %}
+
+{% block content %}
+				<div id="site-introduction">
+					<p>
+
+					{% for member in members %}
+						<li><a href="/{{mall.link}}">{{member.last_name}}{{member.first_name}}</a></li>
+					{% endfor %}
+					</p>
+				</div>
+{% endblock %}
+
