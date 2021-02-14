@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="post">
+	<select id="getPostListByID" resultType = "postvo" parameterType="String">
+		<![CDATA[
+			select p.no, p.title, p.contents, p.reg_date as regDate, p.category_no as categoryNo 
+		    from POST p, CATEGORY c
+		    where c.id = #{id}
+		    and c.no = p.category_no
+	    ]]>
+	</select>
+	
+	<select id="getLatelyPostByID" resultType = "postvo" parameterType="String">
+		<![CDATA[
+			select p.no, p.title, p.contents, p.reg_date as regDate, p.category_no as categoryNo 
+		    from POST p, CATEGORY c
+		    where c.id = #{id}
+		    and c.no = p.category_no
+		    order by desc
+	    ]]>
+	</select>
+	
+	<select id="getPostListByCategoryNo" resultType="postvo" parameterType="long">
+		<![CDATA[
+			select no, title, contents, reg_date as regDate, category_no as categoryNo
+			from POST
+			where category_no = #{categoryNo}
+		]]>
+	</select>
+	
+	<select id="getPostByVO" resultType="postvo" parameterType="postvo">
+		<![CDATA[
+			select no, title, contents, reg_date as regDate, category_no as categoryNo
+			from POST
+			where category_no =#{categoryNo}
+			and no = #{no}
+		]]>
+	</select>	
+	
+	<delete id="removeAllPostByCategory" parameterType="long">
+		<![CDATA[
+			delete from POST
+			where category_no = #{no}
+		]]>
+	</delete>
+	
+	<insert id="addPostByVO" parameterType="postvo">
+		<![CDATA[
+			insert into POST values(null, #{title}, #{contents}, now(), #{categoryNo})
+		]]>
+	</insert>
+	
+</mapper>
