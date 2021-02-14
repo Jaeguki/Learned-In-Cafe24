@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="user">
+	<select id="getUser" resultType = "uservo" parameterType="uservo">
+		select id, name, password, reg_date as regDate 
+	    from USERS
+	    where id=#{id} and password=#{password}
+	</select>
+
+	<insert id="joinUser" parameterType="uservo">
+		<![CDATA[
+			insert 
+		      into USERS
+		    values( #{id }, #{name }, #{password }, now())	
+		]]>
+	</insert>
+
+	<select id="getUserByID" resultType="uservo" parameterType="String">
+		select id, name, password, reg_date as regDate
+		from USERS
+		where id = #{id}
+	</select>
+
+	<select id="getByNo" resultType="uservo" parameterType='long'>
+		<![CDATA[	 
+		select no, name, email, gender
+		  from user 
+		 where no = #{value }
+		]]>
+	</select>
+
+	<select id="getByEmail" resultType="uservo" parameterType='string'>
+		<![CDATA[	 
+		select no, name, email, gender
+		  from user 
+		 where email = #{value }
+		]]>
+	</select>
+	
+	<select id="getByEmailAndPassword" resultType="uservo" parameterType='map'>
+		<![CDATA[	 
+		select no, name
+		  from user 
+		 where email=#{email } 
+		   and password=#{password }
+		]]>
+	</select>
+	
+	<update id="update" parameterType="uservo">
+		<![CDATA[
+		update user
+		   set name = #{name },
+		]]>
+		<if test="password != ''">
+			<![CDATA[
+			password=#{password },
+		]]>
+		</if>		   
+		<![CDATA[
+		       gender = #{gender }
+		       
+		 where no = #{no }      	 
+		]]>
+	</update>
+</mapper>
