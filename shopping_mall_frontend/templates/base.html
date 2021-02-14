@@ -1,0 +1,97 @@
+
+
+<!DOCTYPE html>
+<html>
+<head>
+<title>mysite</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<script src="https://code.jquery.com/jquery-1.9.0.min.js"></script>
+<script>
+	$(function(){
+
+	})
+
+	function get_scripts(){
+		$.ajax({
+			url:"/cart/scripts/",
+			type:"get",
+			dataType:"json",
+			success : function(response){
+				//console.log(data)
+				document.getElementById('script_no').innerHTML = response.data
+			}
+		});
+	}
+	function create_script(){
+		$.ajax({
+			url:"/cart/scripts/",
+			type:"post",
+			dataType:"json",
+			success : function(response){
+				document.getElementById('result').innerHTML = response
+			}
+		});
+	}
+
+
+	function delete_script(){
+		$.ajax({
+			url:"/cart/scripts/"+document.getElementById('script_no').innerHTML ,
+			type:"delete",
+			dataType:"json",
+			success : function(response){
+				document.getElementById('result').innerHTML = response
+			}
+		});
+	}
+</script>
+
+<!DOCTYPE html>
+<html>
+<head>
+<title>mysite</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+{% block csslink %}{% endblock %}
+</head>
+<body>
+	<div id="container">
+		<div id="header">
+			<h1 style="color:red;" align="center">shopping mall platform</h1>
+			<ul>
+				{% if request.session.authuser is None %}
+					<li><a href="/member/login">로그인</a></li>
+					<li><a href="/member/join">회원가입</a></li>
+				{% else %}
+					<li><a href="/member/update">회원정보수정</a></li>
+					<li><a href="/member/logout">로그아웃</a></li>
+					<li>{{ request.session.authuser.first_name }}님 안녕하세요 ^^;</li>
+				{% endif %}
+			</ul>
+		</div>
+		<div id="wrapper">
+			<div id="content">
+				<ul>
+					{% block content %}{% endblock %}
+				</ul>
+			</div>
+		</div>
+		<div id="navigation">
+			<ul>
+				<li><a href="/">메인</a></li>
+				<li><a href="/mall/list">몰 리스트</a></li>
+                {% if request.session.authuser.id == 'admin' %}
+                    <li><a href="/admin/members">회원 리스트</a></li>
+                    <li><a href="/admin/nonMembers">비회원 리스트</a></li>
+
+
+                {% endif %}
+
+			</ul>
+		</div>
+		<div id="footer">
+			<p>(c)opyright 2019</p>
+		</div>
+	</div>
+</body>
+</html>
+
